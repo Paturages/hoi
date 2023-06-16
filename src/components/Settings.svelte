@@ -5,7 +5,7 @@
   let showPanel = false;
 </script>
 
-<button class="settings-button" on:click={() => (showPanel = true)}>⚙</button>
+<button class="settings-button" on:click={() => (showPanel = !showPanel)}>⚙</button>
 {#if showPanel}
 <div class="panel">
   <label class="entry">

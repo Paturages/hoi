@@ -8,6 +8,7 @@
   import Sprite from "./components/Sprite.svelte";
   import Counter from "./components/Counter.svelte";
   import Settings from "./components/Settings.svelte";
+  import About from "./components/About.svelte";
 
   let loaded = false;
 
@@ -42,6 +43,7 @@
 <Counter count={$count} />
 <Sprite src={$sprite} />
 <Settings />
+<About />
 
 <style>
   .bg {

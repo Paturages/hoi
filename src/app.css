@@ -14,3 +14,10 @@ body {
   width: 100%;
   background: linear-gradient(to bottom, #eca0a3, #c37375);
 }
+
+a:visited {
+  color: #8E24AA;
+}
+a {
+  color: #AB47BC;
+}
