@@ -7,6 +7,7 @@
 
   import Sprite from "./components/Sprite.svelte";
   import Counter from "./components/Counter.svelte";
+  import Settings from "./components/Settings.svelte";
 
   let loaded = false;
 
@@ -40,6 +41,7 @@
 <button class="hoi-button" on:click={handleClick} />
 <Counter count={$count} />
 <Sprite src={$sprite} />
+<Settings />
 
 <style>
   .bg {

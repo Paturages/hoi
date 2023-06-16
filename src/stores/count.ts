@@ -2,8 +2,7 @@ import { writable } from "svelte/store";
 
 function createCount() {
   const stored = localStorage.getItem("hoi:count");
-  let count = stored ? Number(stored) : 0;
-  const { subscribe, set, update } = writable(count);
+  const { subscribe, set, update } = writable(stored ? Number(stored) : 0);
 
   subscribe(value => localStorage.setItem("hoi:count", String(value)));
   

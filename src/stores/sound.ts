@@ -1,6 +1,7 @@
 import * as Tone from "tone";
 import { writable } from "svelte/store";
 import { shuffle } from "../utils";
+import { volumeSetting } from "./settings";
 
 export const SOUND_COUNT = 16;
 
@@ -33,6 +34,7 @@ function createSound() {
     currentSound = soundQueue.pop();
     cycleFirstSound = currentSound;
     tonePlayers = new Tone.Players(soundObj).chain(toneContext.destination);
+    volumeSetting.subscribe((value) => (tonePlayers.volume.value = Math.log(value / 100) * 10));
     set(currentSound);
     return soundUrls;
   };
