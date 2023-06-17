@@ -1,8 +1,16 @@
 @font-face {
-  font-family: 'Comicy';
+  font-family: Cheri;
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/cheri.ttf');
+}
+/* Special clause for @ and _ because of font limitations */
+@font-face {
+  font-family: Cheri;
   font-style: normal;
   font-weight: 400;
   src: url('./assets/fonts/comicy.otf');
+  unicode-range: U+40, U+5F;
 }
 
 html {

@@ -10,7 +10,7 @@
   .container {
     position: relative;
     z-index: 2;
-    font-family: Comicy, sans-serif;
+    font-family: Cheri, sans-serif;
     margin-top: 1em;
     width: 100%;
     text-align: center;

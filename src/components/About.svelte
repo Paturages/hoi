@@ -4,10 +4,13 @@
 
 <button class="about-button" on:click={() => (showPanel = !showPanel)}>ℹ</button>
 {#if showPanel}
+<div aria-hidden="true" class="backdrop" on:click={() => (showPanel = false)} />
 <div class="panel">
   <div class="content">
-    This is dedicated to the cutest treasure hunting fox
+    This is dedicated to the cutest treasure<br />hunting fox
     <a href="https://www.youtube.com/@CheriLupina" target="_blank">Cheri Lupina</a>
+    <br /><br />
+    <a href="https://github.com/Paturages/hoi" target="_blank">Source code</a>
   </div>
   <div class="content">
     <div class="entry">
@@ -25,7 +28,7 @@
     <div class="entry">
       <div class="entry-label">Model art</div>
       <div class="entry-value">
-        <a href="https://twitter.com/ya3ji_kim_" target="_blank">@ya3ji_kim_</a>
+        <a href="https://jikim.carrd.co" target="_blank">@ya3ji_kim_</a>
       </div>
     </div>
     <div class="entry">
@@ -43,7 +46,7 @@
 
 <style>
   .button {
-    font-family: Comicy, sans-serif;
+    font-family: Cheri, sans-serif;
     outline: none;
     appearance: none;
     cursor: pointer;
@@ -52,6 +55,15 @@
     background: #eca0a3;
     font-size: 1em;
     padding: .25em .5em;
+  }
+
+  .backdrop {
+    z-index: 19;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
   .about-button {
@@ -76,7 +88,7 @@
   }
 
   .panel {
-    font-family: Comicy, sans-serif;
+    font-family: Cheri, sans-serif;
     z-index: 30;
     position: absolute;
     top: 50%;

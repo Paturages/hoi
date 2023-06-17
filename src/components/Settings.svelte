@@ -7,6 +7,7 @@
 
 <button class="settings-button" on:click={() => (showPanel = !showPanel)}>⚙</button>
 {#if showPanel}
+<div aria-hidden="true" class="backdrop" on:click={() => (showPanel = false)} />
 <div class="panel">
   <label class="entry">
     <div class="entry-text">Volume 🔊</div>
@@ -31,7 +32,7 @@
 
 <style>
   .button {
-    font-family: Comicy, sans-serif;
+    font-family: Cheri, sans-serif;
     outline: none;
     appearance: none;
     cursor: pointer;
@@ -40,6 +41,15 @@
     background: #eca0a3;
     font-size: 1em;
     padding: .25em .5em;
+  }
+
+  .backdrop {
+    z-index: 19;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
   .settings-button {
@@ -64,7 +74,7 @@
   }
 
   .panel {
-    font-family: Comicy, sans-serif;
+    font-family: Cheri, sans-serif;
     z-index: 30;
     position: absolute;
     top: 50%;
@@ -91,7 +101,7 @@
     width: 9em;
   }
   .entry button {
-    font-family: Comicy, sans-serif;
+    font-family: Cheri, sans-serif;
     color: #fff;
   }
 
