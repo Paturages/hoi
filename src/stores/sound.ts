@@ -1,9 +1,9 @@
 import * as Tone from "tone";
 import { writable } from "svelte/store";
 import { shuffle } from "../utils";
-import { volumeSetting } from "./settings";
+import { volumeSetting, moreSoundsSetting } from "./settings";
 
-export const SOUND_COUNT = 16;
+const importSounds = import.meta.glob('../assets/sounds/**/*.ogg');
 
 Tone.getContext().dispose();
 const toneContext = new Tone.Context({
@@ -13,38 +13,70 @@ const toneContext = new Tone.Context({
 });
 Tone.setContext(toneContext);
 
+let moreSounds = false;
+moreSoundsSetting.subscribe(value => (moreSounds = value));
+
 function createSound() {
   const { subscribe, set } = writable("");
 
   const soundObj: Record<string, string> = {};
-  let soundQueue: string[];
-  let cycleFirstSound, currentSound;
+  let commonQueue: string[];
+  let rareQueue: string[];
+  let ssrQueue: string[];
+  let commonFirst, rareFirst, ssrFirst;
+  let currentCommon, currentRare, currentSsr;
   let tonePlayers: Tone.Players;
 
   const init = async (): Promise<string[]> => {
     const soundUrls = await Promise.all(
-      new Array(SOUND_COUNT).fill(0).map(async (_, i) => {
-        const fileName = `${i + 1}`.padStart(3, "0");
-        const ogg = await import(`../assets/sounds/common/${fileName}.ogg`);
-        soundObj[`common_${fileName}`] = ogg.default;
+      Object.entries(importSounds).map(async ([path, fn]) => {
+        const fileName = path.split('/').slice(-2).join('_');
+        const ogg: any = await fn();
+        soundObj[fileName] = ogg.default;
         return ogg.default;
       })
     );
-    soundQueue = shuffle(Object.keys(soundObj));
-    currentSound = soundQueue.pop();
-    cycleFirstSound = currentSound;
+    commonQueue = shuffle(Object.keys(soundObj).filter(name => name.startsWith('common_')));
+    rareQueue = shuffle(Object.keys(soundObj).filter(name => name.startsWith('rare_')));
+    ssrQueue = shuffle(Object.keys(soundObj).filter(name => name.startsWith('ssr_')));
+
+    currentCommon = commonQueue.pop();
+    currentRare = rareQueue.pop();
+    currentSsr = ssrQueue.pop();
+
+    commonFirst = currentCommon;
+    rareFirst = currentRare;
+    ssrFirst = currentSsr;
+
     tonePlayers = new Tone.Players(soundObj).chain(toneContext.destination);
     volumeSetting.subscribe((value) => (tonePlayers.volume.value = Math.log(value / 100) * 10));
-    set(currentSound);
+    set(currentCommon);
     return soundUrls;
   };
 
   const cycle = () => {
-    tonePlayers.player(currentSound).start(0);
-    soundQueue.unshift(currentSound);
-    currentSound = soundQueue.pop();
-    if (currentSound == cycleFirstSound) shuffle(soundQueue);
-    set(currentSound);
+    const soundSeed = Math.random();
+    let sound: string;
+
+    if (moreSounds && soundSeed < 0.05) {
+      ssrQueue.unshift(currentSsr);
+      currentSsr = ssrQueue.pop();
+      if (currentSsr == ssrFirst) ssrQueue = shuffle(ssrQueue);
+      sound = currentSsr;
+    } else if (moreSounds && soundSeed < 0.15) {
+      rareQueue.unshift(currentRare);
+      currentRare = rareQueue.pop();
+      if (currentRare == rareFirst) rareQueue = shuffle(rareQueue);
+      sound = currentRare;
+    } else {
+      commonQueue.unshift(currentCommon);
+      currentCommon = commonQueue.pop();
+      if (currentCommon == commonFirst) commonQueue = shuffle(commonQueue);
+      sound = currentCommon;
+    }
+
+    tonePlayers.player(sound).start(0);
+    set(sound);
   };
 
   return { subscribe, init, cycle };

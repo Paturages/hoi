@@ -1,6 +1,11 @@
 <script lang="ts">
   import { count } from "../stores/count";
-  import { pinballSetting, volumeSetting, resetSettings } from "../stores/settings";
+  import {
+    volumeSetting,
+    pinballSetting,
+    moreSoundsSetting,
+    resetSettings
+  } from "../stores/settings";
   
   let showPanel = false;
 </script>
@@ -17,6 +22,10 @@
   <label class="entry">
     <div class="entry-text">Pinball mode</div>
     <input type="checkbox" bind:checked={$pinballSetting} />
+  </label>
+  <label class="entry">
+    <div class="entry-text">Rare sounds</div>
+    <input type="checkbox" bind:checked={$moreSoundsSetting} />
   </label>
   <div class="entry">
     <button class="button" on:click={resetSettings}>Reset settings</button>

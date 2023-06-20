@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 import { shuffle } from "../utils";
 
-export const SPRITE_COUNT = 15;
+const SPRITE_COUNT = 15;
 
 function createSprite() {
   const { subscribe, set } = writable("");

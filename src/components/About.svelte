@@ -10,6 +10,9 @@
     This is dedicated to the cutest treasure<br />hunting fox
     <a href="https://www.youtube.com/@CheriLupina" target="_blank">Cheri Lupina</a>
     <br /><br />
+    Special thanks to <a href="https://twitter.com/KirinoMiyumi" target="_blank">Kirino Miyumi</a><br />
+    for cutting the sound bites
+    <br /><br />
     <a href="https://github.com/Paturages/hoi" target="_blank">Source code</a>
   </div>
   <div class="content">
