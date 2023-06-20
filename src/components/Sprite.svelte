@@ -10,27 +10,25 @@
   let alignItems = 'flex-end';
   let maxHeight = '100vh';
   let maxWidth = '100vw';
-  let left = '0px';
-  let right = '0px';
-  let top = '0px';
-  let bottom = '0px';
 
   const randomize = () => {
     const side = ['top', 'bottom', 'left', 'right'][Math.floor(Math.random() * 4)];
     // Randomize size from -X% to +X%
     const RANDOM_SIZE_BOUNDS = 10;
     const randomSize = 1 + (((Math.random() * 2 * RANDOM_SIZE_BOUNDS) - RANDOM_SIZE_BOUNDS) / 100);
-    // Randomize position from -Z px to +Z px
-    const RANDOM_POSITION_BOUNDS = 200;
+    // Randomize position from -Z vw/wh to +Z vw/vh
+    const RANDOM_POSITION_BOUNDS = 20;
     const randomPosVar = (Math.random() * 2 * RANDOM_POSITION_BOUNDS) - RANDOM_POSITION_BOUNDS;
     // The angle is dependent on the position (it should point roughly towards center)
-    const angle = -randomPosVar / 10;
-    // This offset has to be applied to hide the cropped parts of the sprites
-    const hideThePainOffset = randomSize * Math.abs(randomPosVar) / 1.2;
+    const angle = randomPosVar;
+    // This offset has to be applied to hide (at least part of) the cropped parts of the sprites
+    // The offset scales on vh on left/right and vw on top/bottom because that's the axis
+    // where the sprite is and moves around
+    const hideThePainOffset = randomSize * Math.abs(randomPosVar);
 
     if (side === 'left') {
       containerTransformOrigin = 'left center';
-      containerTransform = `rotate(${angle}deg) translate(${-hideThePainOffset}px, ${randomPosVar}px) scale(${randomSize})`;
+      containerTransform = `rotate(${-angle}deg) translate(${-hideThePainOffset}vh, ${randomPosVar}vw) scale(${randomSize})`;
       imgTransformOrigin = 'top center';
       imgTransform = 'rotate(90deg)';
       justifyContent = 'flex-start';
@@ -39,7 +37,7 @@
       maxWidth = '100vh';
     } else if (side === 'right') {
       containerTransformOrigin = 'right center';
-      containerTransform = `rotate(${angle}deg) translate(${hideThePainOffset}px, ${randomPosVar}px) scale(${randomSize})`;
+      containerTransform = `rotate(${angle}deg) translate(${hideThePainOffset}vh, ${randomPosVar}vw) scale(${randomSize})`;
       imgTransformOrigin = 'top center';
       imgTransform = 'rotate(-90deg)';
       justifyContent = 'flex-end';
@@ -48,7 +46,7 @@
       maxWidth = '100vh';
     } else if (side === 'top') {
       containerTransformOrigin = 'top center';
-      containerTransform = `rotate(${angle}deg) translate(${randomPosVar}px, ${-hideThePainOffset}px) scale(${randomSize})`;
+      containerTransform = `rotate(${angle}deg) translate(${randomPosVar}vh, ${-hideThePainOffset}vw) scale(${randomSize})`;
       imgTransformOrigin = 'center';
       imgTransform = 'rotate(-180deg)';
       justifyContent = 'center';
@@ -57,7 +55,7 @@
       maxWidth = '100vw';
     } else {
       containerTransformOrigin = 'bottom center';
-      containerTransform = `rotate(${angle}deg) translate(${randomPosVar}px, ${hideThePainOffset}px) scale(${randomSize})`;
+      containerTransform = `rotate(${-angle}deg) translate(${randomPosVar}vh, ${hideThePainOffset}vw) scale(${randomSize})`;
       imgTransformOrigin = 'center';
       imgTransform = 'rotate(0deg)';
       justifyContent = 'center';
@@ -91,10 +89,6 @@
   class="container"
   style:justify-content={justifyContent}
   style:align-items={alignItems}
-  style:left={left}
-  style:right={right}
-  style:top={top}
-  style:bottom={bottom}
   style:transform={containerTransform}
   style:transform-origin={containerTransformOrigin}
 >
@@ -113,9 +107,13 @@
   .container {
     z-index: 1;
     position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     display: flex;
     flex-direction: row;
-    transition: transform .15s ease-in-out;
+    transition: all .15s ease-in-out;
   }
   .sprite {
     transition: transform .15s ease-in-out;
