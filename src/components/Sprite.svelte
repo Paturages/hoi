@@ -1,26 +1,123 @@
 <script lang="ts">
   export let src: string;
+  export let pinball: boolean;
+
+  let containerTransform = 'rotate(0deg) translate(0px, 0px) scale(1)';
+  let containerTransformOrigin = 'bottom center';
+  let imgTransform = 'rotate(0deg)';
+  let imgTransformOrigin = 'top center';
+  let justifyContent = 'center';
+  let alignItems = 'flex-end';
+  let maxHeight = '100vh';
+  let maxWidth = '100vw';
+  let left = '0px';
+  let right = '0px';
+  let top = '0px';
+  let bottom = '0px';
+
+  const randomize = () => {
+    const side = ['top', 'bottom', 'left', 'right'][Math.floor(Math.random() * 4)];
+    // Randomize size from -X% to +X%
+    const RANDOM_SIZE_BOUNDS = 10;
+    const randomSize = 1 + (((Math.random() * 2 * RANDOM_SIZE_BOUNDS) - RANDOM_SIZE_BOUNDS) / 100);
+    // Randomize position from -Z px to +Z px
+    const RANDOM_POSITION_BOUNDS = 200;
+    const randomPosVar = (Math.random() * 2 * RANDOM_POSITION_BOUNDS) - RANDOM_POSITION_BOUNDS;
+    // The angle is dependent on the position (it should point roughly towards center)
+    const angle = -randomPosVar / 10;
+    // This offset has to be applied to hide the cropped parts of the sprites
+    const hideThePainOffset = randomSize * Math.abs(randomPosVar) / 1.2;
+
+    if (side === 'left') {
+      containerTransformOrigin = 'left center';
+      containerTransform = `rotate(${angle}deg) translate(${-hideThePainOffset}px, ${randomPosVar}px) scale(${randomSize})`;
+      imgTransformOrigin = 'top center';
+      imgTransform = 'rotate(90deg)';
+      justifyContent = 'flex-start';
+      alignItems = 'flex-end';
+      maxHeight = '100vw';
+      maxWidth = '100vh';
+    } else if (side === 'right') {
+      containerTransformOrigin = 'right center';
+      containerTransform = `rotate(${angle}deg) translate(${hideThePainOffset}px, ${randomPosVar}px) scale(${randomSize})`;
+      imgTransformOrigin = 'top center';
+      imgTransform = 'rotate(-90deg)';
+      justifyContent = 'flex-end';
+      alignItems = 'flex-end';
+      maxHeight = '100vw';
+      maxWidth = '100vh';
+    } else if (side === 'top') {
+      containerTransformOrigin = 'top center';
+      containerTransform = `rotate(${angle}deg) translate(${randomPosVar}px, ${-hideThePainOffset}px) scale(${randomSize})`;
+      imgTransformOrigin = 'center';
+      imgTransform = 'rotate(-180deg)';
+      justifyContent = 'center';
+      alignItems = 'flex-start';
+      maxHeight = '100vh';
+      maxWidth = '100vw';
+    } else {
+      containerTransformOrigin = 'bottom center';
+      containerTransform = `rotate(${angle}deg) translate(${randomPosVar}px, ${hideThePainOffset}px) scale(${randomSize})`;
+      imgTransformOrigin = 'center';
+      imgTransform = 'rotate(0deg)';
+      justifyContent = 'center';
+      alignItems = 'flex-end';
+      maxHeight = '100vh';
+      maxWidth = '100vw';
+    }
+  }
+
+  $: {
+    // Force this reactivity statement to occur whenever src changes,
+    // even though none of the changes here involve src at all
+    // (I assume Svelte listens to the changes of the variables that are actually
+    // included inside of the statement)
+    src;
+    if (pinball) randomize();
+    else {
+      containerTransformOrigin = 'bottom center';
+      containerTransform = 'rotate(0deg) translate(0px, 0px) scale(1)';
+      imgTransformOrigin = 'center';
+      imgTransform = 'rotate(0deg)';
+      justifyContent = 'center';
+      alignItems = 'flex-end';
+      maxHeight = '100vh';
+      maxWidth = '100vw';
+    }
+  }
 </script>
 
-<div class="container">
-  <img class="sprite" {src} alt="" />
+<div
+  class="container"
+  style:justify-content={justifyContent}
+  style:align-items={alignItems}
+  style:left={left}
+  style:right={right}
+  style:top={top}
+  style:bottom={bottom}
+  style:transform={containerTransform}
+  style:transform-origin={containerTransformOrigin}
+>
+  <img
+    {src}
+    alt=""
+    class="sprite"
+    style:transform={imgTransform}
+    style:max-height={maxHeight}
+    style:max-width={maxWidth}
+    style:transform-origin={imgTransformOrigin}
+  />
 </div>
 
 <style>
   .container {
     z-index: 1;
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: flex-end;
+    transition: transform .15s ease-in-out;
   }
   .sprite {
-    max-height: 100%;
-    max-width: 100%;
+    transition: transform .15s ease-in-out;
   }
 </style>

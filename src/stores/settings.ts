@@ -7,7 +7,7 @@ interface Settings {
 
 const defaultSettings: Settings = {
   volume: 70,
-  pinball: true
+  pinball: false
 }
 
 const storedVolume = localStorage.getItem("hoi:settings:volume");

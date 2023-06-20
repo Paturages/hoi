@@ -4,6 +4,7 @@
   import { sprite } from "./stores/sprite";
   import { sound } from "./stores/sound";
   import { count } from "./stores/count";
+  import { pinballSetting } from "./stores/settings";
 
   import Sprite from "./components/Sprite.svelte";
   import Counter from "./components/Counter.svelte";
@@ -41,7 +42,7 @@
 <div class="bg" />
 <button class="hoi-button" on:click={handleClick} />
 <Counter count={$count} />
-<Sprite src={$sprite} />
+<Sprite src={$sprite} pinball={$pinballSetting} />
 <Settings />
 <About />
 
